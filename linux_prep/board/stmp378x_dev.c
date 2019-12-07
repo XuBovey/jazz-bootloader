@@ -21,7 +21,7 @@
 /************************************************
  *		LRADC keyboard data		*
  ************************************************/
-int lradc_keypad_ch = LRADC_CH0;
+int lradc_keypad_ch = LRADC_CH1;
 int lradc_vddio_ch = LRADC_CH6;
 
 struct lradc_keycode lradc_keycodes[] = {

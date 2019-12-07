@@ -153,7 +153,7 @@ void PowerPrep_PrintBatteryVoltage(unsigned int value);
 #endif
 
 #define DISABLE_VDDIO_BO_PROTECTION
-
+#define NO_BATTERY_VOLTAGE_SOURCE
 ////////////////////////////////////////////////////////////////////////////////
 // Globals
 ////////////////////////////////////////////////////////////////////////////////
@@ -217,6 +217,7 @@ int _start( void )
 #ifndef PressDelay	//system start wait time (unit:0.5s)
 #define PressDelay 2	//wait 1s
 #endif
+#if 0
               while(i++ < PressDelay)
 			{
 				printf(">");
@@ -224,7 +225,8 @@ int _start( void )
 				printf(">");
 				PowerPrep_Delay(250000);
 			}
-
+#endif
+	PowerPrep_Delay(10000); 
 	printf("\r\nPowerPrep start initialize power...\r\n");
 	HW_POWER_VDDDCTRL.B.LINREG_OFFSET = HW_POWER_LINREG_OFFSET_STEP_BELOW;
 	HW_POWER_VDDACTRL.B.LINREG_OFFSET = HW_POWER_LINREG_OFFSET_STEP_BELOW;
@@ -232,7 +234,7 @@ int _start( void )
 
 	// Ready the power block for 5V detection.
 	PowerPrep_Setup5vDetect();
-	PowerPrep_SetupBattDetect();
+//	PowerPrep_SetupBattDetect();
 
 	// Ensure the power source that turned on the device is sufficient to
 	// power the device.
@@ -259,6 +261,7 @@ int _start( void )
 	/* If Battery not ready,setup the auto power down if we lost 5V.*/
 	if (!bBatteryReady)
 		HW_POWER_5VCTRL_SET(BM_POWER_5VCTRL_PWDN_5VBRNOUT);
+	printf("\r\ndebug return");	
 	return iRtn;
 }
 

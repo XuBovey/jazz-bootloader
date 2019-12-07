@@ -61,7 +61,7 @@ boot_prep:
 	$(MAKE) -C boot_prep  ARCH=$(ARCH) BOARD=$(BOARD)
 
 updater: linux_prep boot_prep power_prep
-	@echo "Build updater firmware"
+	@echo "Build updater firmware%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 	./elftosb2 -z -c ./updater_prebuilt.db -o updater.sb
 
 linux_prep:

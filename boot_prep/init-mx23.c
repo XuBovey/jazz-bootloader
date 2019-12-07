@@ -31,7 +31,7 @@
 #include <stdarg.h>
 
 #define PIN_DRIVE_12mA 2
-//#define EMI_96M
+#define EMI_96M
  /* Debug uart have been init by boot rom. */
 void putc(char ch)
 {
@@ -636,13 +636,13 @@ void change_cpu_freq()
 	value |= BF_POWER_VDDDCTRL_TRG(30); /*change to 1.550v*/
 	HW_POWER_VDDDCTRL_WR(value);
 
-	delay(10000);
+	delay(1000);//xubh 2019-7-29 10000->1000
 
 	printf("Frac 0x%x\r\n", HW_CLKCTRL_FRAC_RD());
 
 	value = HW_CLKCTRL_FRAC_RD();
 	value &= ~BM_CLKCTRL_FRAC_CPUFRAC;
-	value |= BF_CLKCTRL_FRAC_CPUFRAC(19);
+	value |= BF_CLKCTRL_FRAC_CPUFRAC(19); // 19->27 454MHz -> 320MHz
 	value &= ~BM_CLKCTRL_FRAC_CLKGATECPU;
 
 	HW_CLKCTRL_FRAC_WR(value); /*Change cpu to 454Mhz*/
@@ -652,7 +652,7 @@ void change_cpu_freq()
 	HW_CLKCTRL_HBUS_SET(BM_CLKCTRL_HBUS_DIV);
 	HW_CLKCTRL_HBUS_CLR(((~3)&BM_CLKCTRL_HBUS_DIV));
 
-	delay(10000);
+	delay(1000);//xubh 209-7-29 10000-->1000
 	printf("start change cpu freq\r\n");
 
 	if ((HW_POWER_5VCTRL.B.PWD_CHARGE_4P2 == 1) ||
@@ -955,7 +955,7 @@ int _start(int arg)
 	unsigned int CE = 0x03;
 	int i;
 	printf(__DATE__ __TIME__);
-        buzzer();
+        //buzzer();//xubh 2019-7-29
 	printf("\r\n");
     printf("Fuse 0x%x\r\n",HW_OCOTP_CUSTCAP_RD());
 
@@ -985,12 +985,15 @@ int _start(int arg)
 	}
 
 	poweron_pll();
+	printf("poweron_pll done\r\n");
 	delay(11000);
 #define     MEM_MDDR
 #ifdef MEM_MDDR
 	turnon_mem_rail(1800);
+	printf("turnon_mem_rail done\r\n");
 #else
 	turnon_mem_rail(2500); 
+	printf(turnon_mem_rail 2500 done\r\n");
 #endif
 
 	delay(11000);
@@ -1002,6 +1005,7 @@ int _start(int arg)
 
 	disable_emi_padkeepers();
 
+	printf("try init_clock\r\n");
 	init_clock();
 
 	delay(10000);
@@ -1013,7 +1017,7 @@ int _start(int arg)
 	printf("init_mddr_mt46h32m16lf_96Mhz\r\n");
 #else
 	init_mddr_mt46h32m16lf_133Mhz(CE);
-printf("init_mddr_mt46h32m16lf_133Mhz\r\n");
+	printf("init_mddr_mt46h32m16lf_133Mhz\r\n");
 #endif
 
 #else
@@ -1034,11 +1038,13 @@ printf("init_mddr_mt46h32m16lf_133Mhz\r\n");
 	entry_auto_clock_gate();
 
 	change_cpu_freq();
-
+#if 0
 #ifdef MEM_MDDR 
 	//set GPMI_D14 to low  to enable the power setting
+	printf("power_gpmi_d14 and d15\r\n");
 	power_enable_gpmi_d14();
 	power_enable_gpmi_d15();
+#endif
 #endif
 
 #if 0

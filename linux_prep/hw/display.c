@@ -243,6 +243,12 @@ static void display_init (void)
         int width = logo_descriptor->width;
         int height = logo_descriptor->height;
         unsigned short n565color;
+	if(width != 800 || height != 480)
+	{
+		printf("lcd init err return\n");
+		return;
+	}
+	printf("lcd width=%d, height=%d",width,height);
         //寻找索引和颜色表的首地址
         unsigned char * clut = 0x40800018;
         unsigned char * logo = 0x40800018 + clutsize;
@@ -253,7 +259,7 @@ static void display_init (void)
         int i=0,j=0,a=0;
         unsigned int color_table[logo_descriptor->clutsize];
         unsigned short color_table_565[logo_descriptor->clutsize];
-        printf("sssssssssssstart.......\n");
+        //printf("sssssssssssstart.......\n");
         for(a=0;a<logo_descriptor->clutsize;a++)
         {
         switch(logo_descriptor->type){
@@ -278,7 +284,7 @@ static void display_init (void)
         initLCD_IO();
         initLCD_Para();
         //向LCD屏写入数据
-        //while(1){
+       // while(1){
                 LCD_SetCursor(0x0000,0x0000);//设置光标位置
                 LCD_WR_REG(0X2C);
                 //LCD_WR_REG(0X28);
@@ -314,20 +320,20 @@ void initLCD_Para(void)
     LCD_SDO_1;
     LCD_CS_1;
 
-    delayMs(2);
+//    delayMs(2);//xubh 2019-7-30
     LCD_RESET_1;
-    delayMs(20);
+    delayMs(5);//xubh 2019-7-30 20->5
     LCD_RESET_0;
-    delayMs(10);
+    delayMs(5);//xubh 2019-7-30 10->5
     LCD_RESET_1;
-    delayMs(220);
+    delayMs(5);//220 //xubh 19-7-29
 
-    printf("tttttttttttt --- 8  \r\n");
+//    printf("tttttttttttt --- 8  \r\n");
     LCD_RegisterIndex(0x11);    // 退出睡眠模式
 //        Delay(120);
-    delayMs(500);
+    delayMs(5);//500 //xubh 19-7-29 50->5@19-7-30
 
-    printf("tttttttttttt --- 9  \r\n");
+//    printf("tttttttttttt --- 9  \r\n");
     LCD_WR_REG(0xCF);
         LCD_WR_DATA(0x00);
         LCD_WR_DATA(0xC1);
@@ -437,9 +443,9 @@ void initLCD_Para(void)
 
         LCD_WR_REG(0x11); //Exit Sleep
 //        msleep(120);
-        delayMs(120);
-        printf("tttttttttttt --- b  \r\n");
-        //LCD_WR_REG(0x29); //display on
+//        delayMs(120);//120 19-7-29 xubh
+       // printf("tttttttttttt --- b  \r\n");
+       LCD_WR_REG(0x29); //display on
 
 }
 

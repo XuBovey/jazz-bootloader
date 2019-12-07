@@ -1,1 +1,4 @@
-console=ttyAMA0,115200 ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs init=/sbin/init mtdparts=gpmi-nand:12m(boot),-(root) vt.global_cursor_default=0
+console=ttyAM0,115200 printk.time=y ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs init=/sbin/init  vt.global_cursor_default=0
+#console=ttyAM0,115200 printk.time=y mkfd.jffs2 -d stretch_rootfs/ -s 0x800 -e 0x20000 -o /tmp/rootfs.jffs2 -v init=/sbin/init vt.global_cursor_default=0
+#console=ttyAMA0,115200 printk.time=y rdinit=/init init=/init mtdparts=gpmi-nand:12m(boot),-(root) vt.global_cursor_default=0
+#console=ttyAMA0,115200 ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs init=/sbin/init mtdparts=gpmi-nand:12m(boot),-(root) vt.global_cursor_default=0

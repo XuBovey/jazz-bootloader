@@ -1,0 +1,1 @@
+console=ttyAM0,115200 printk.time=y ubi.mtd=1 root=ubi0:rootfs rootfstype=ubifs init=/sbin/init mtdparts=gpmi-nfc:12m(boot),-(gpmi-nfc-general-use) vt.global_cursor_default=0
